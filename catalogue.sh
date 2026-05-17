@@ -124,12 +124,12 @@ VALIDATE $? "Start Catalogue service"
 # 2. Add repository content > Refer Mongodb doc
 # 3. Copy file to /etc/yum.repos.d/
 
-Copy MongoDB Repo File
+# Copy MongoDB Repo File
 cp $SCRIPT_DIR/mongo.repo /etc/yum.repos.d/mongo.repo  
 VALIDATE $? "Copy MongoDB Repo File"
 
 # Install MongoDB client
-dnf install mongodb-mongosh-org -y  &>>$LOG_FILE
+dnf install mongodb-mongosh -y  &>>$LOG_FILE
 VALIDATE $? "Installing MongoDB client"
 
 # Load catalogue schema into MongoDB
