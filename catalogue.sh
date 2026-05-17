@@ -104,7 +104,7 @@ VALIDATE $? "Install NodeJS Dependencies"
 
 # Copy Catalogue Service File
 echo -e "$G Copying catalogue service file $N"
-cp $PWD/catalogue.service /etc/systemd/system/catalogue.service  &>>$LOG_FILE
+cp $SCRIPT_DIR/catalogue.service /etc/systemd/system/catalogue.service  &>>$LOG_FILE
 VALIDATE $? "Copying catalogue service file"
 
 # Reload SystemD Manager
