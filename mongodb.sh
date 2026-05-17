@@ -41,9 +41,9 @@ fi
 VALIDATE(){
     if [ $1 -eq 0 ]
     then
-         echo " $G $2 is SUCCESS $N "  | tee -a $LOG_FILE
+         echo -e " $G $2 is SUCCESS $N "  | tee -a $LOG_FILE
     else
-         echo " $R $2 is FAILED $N "   | tee -a $LOG_FILE
+         echo -e " $R $2 is FAILED $N "   | tee -a $LOG_FILE
          exit 1
     fi
 
@@ -67,13 +67,13 @@ echo -e "$Y Enabling MongoDB $N" | tee -a $LOG_FILE
 systemctl enable mongod &>>$LOG_FILE
 VALIDATE $? "Enable MongoDB"
 
-echo -e "Y Starting MongoDB Instance $N" | tee -a $LOG_FILE
+echo -e "$Y Starting MongoDB Instance $N" | tee -a $LOG_FILE
 systemctl start mongod &>>$LOG_FILE
 VALIDATE $? "Starting MongoDB"
 
 # Update MongoDB Listen Address bindIp: 127.0.0.1 > bindIp: 0.0.0.0
 echo -e "$Y Updating MongoDB configuration $N " | tee -a $LOG_FILE
-sed -i 's/127.0.0.1/0.0.0.0 ' /etc/mongod.conf
+sed -i 's/127.0.0.1/0.0.0.0' /etc/mongod.conf
 VALIDATE $? "Updating MongoDB Remote Connection"
 
 # Restart Mongodb Service
