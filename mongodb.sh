@@ -72,8 +72,8 @@ systemctl start mongod &>>$LOG_FILE
 VALIDATE $? "Starting MongoDB"
 
 # Update MongoDB Listen Address bindIp: 127.0.0.1 > bindIp: 0.0.0.0
-echo -e "$Y Updating MongoDB configuration $N " | tee -a $LOG_FILE
-sed -i 's/127.0.0.1/0.0.0.0' /etc/mongod.conf
+echo -e "$Y Updating MongoDB configuration $N" | tee -a $LOG_FILE
+sed -i 's/127.0.0.1/0.0.0.0/g' /etc/mongod.conf
 VALIDATE $? "Updating MongoDB Remote Connection"
 
 # Restart Mongodb Service
