@@ -109,7 +109,7 @@ VALIDATE $? "Copying catalogue service file"
 
 # Reload SystemD Manager
 echo -e "$Y Reloading SystemD Manager $N"
-systemctl daemon Reload  
+systemctl daemon-reload  
 VALIDATE $? "Reloading SystemD Manager"
 
 # Enable & Start Catalogue service
