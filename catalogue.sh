@@ -67,7 +67,7 @@ VALIDATE $? "Installing NodeJS"
 
 # Creating Roboshop Application User
 id roboshop
-if [ $id -ne 0 ]
+if [ $? -ne 0 ]
 then
      useradd --system --home /app --shell /sbin/nologin --comment "Roboshop System User" Roboshop &>>$LOG_FILE
      VALIDATE $? "Creating Roboshop Application User"
