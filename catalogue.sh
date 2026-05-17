@@ -66,8 +66,15 @@ dnf install nodejs -y  &>>$LOG_FILE
 VALIDATE $? "Installing NodeJS"
 
 # Creating Roboshop Application User
-useradd --system --home /app --shell /sbin/nologin --comment "Roboshop System User" Roboshop &>>$LOG_FILE
-VALIDATE $? "Creating Roboshop Application User"
+id roboshop
+if [ $id -ne 0 ]
+then
+     useradd --system --home /app --shell /sbin/nologin --comment "Roboshop System User" Roboshop &>>$LOG_FILE
+     VALIDATE $? "Creating Roboshop Application User"
+else
+     echo -e "$B Roboshop User Already Created.. $Y Skipping $N"
+fi
+
 
 # Creating Application Directory
 echo -e "$B Creating a /app Directory $N"
@@ -97,7 +104,7 @@ VALIDATE $? "Install NodeJS Dependencies"
 
 # Copy Catalogue Service File
 echo -e "$G Copying catalogue service file $N"
-cp catalogue.service /etc/systemd/system/catalogue.service  &>>$LOG_FILE
+cp $PWD/catalogue.service /etc/systemd/system/catalogue.service  &>>$LOG_FILE
 VALIDATE $? "Copying catalogue service file"
 
 # Reload SystemD Manager
