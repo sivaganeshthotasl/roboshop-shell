@@ -78,7 +78,7 @@ fi
 
 # Creating Application Directory
 echo -e "$B Creating a /app Directory $N"
-mkdir /app &>>$LOG_FILE
+mkdir -p /app &>>$LOG_FILE
 VALIDATE $? "Creating Application Directory"
 
 # Download the Catalogue Application Code into /tmp Directory
