@@ -47,7 +47,7 @@ fi
 VALIDATE(){
     if [ $1 -eq 0 ]
     then
-         echo -e "$G $2 is.. Sucess $N" | tee -a $LOG_FILE
+         echo -e "$G $2 is.. Success $N" | tee -a $LOG_FILE
     else
          echo -e "$R $2 is ... Failed $N" | tee -a $LOG_FILE
          exit 1
@@ -67,6 +67,7 @@ VALIDATE $? "Installing Redis"
 
 # Update bind IP and Protect Mode as NO
 sed -i -e 's/127.0.0.1/0.0.0.0/g' -e '/protected-mode/ c protected-mode no' /etc/redis/redis.conf
+VALIDATE $? "Updating Redis Configuration"
 
 # Enable and Start Redis Service
 systemctl enable redis &>>$LOG_FILE
@@ -74,10 +75,15 @@ VALIDATE $? "Enabling Redis Service"
 systemctl start redis &>>$LOG_FILE
 VALIDATE $? "Starting Redis Service"
 
+# Redis Service Validating
+netstat -lntp | grep 6379 &>>$LOG_FILE
+VALIDATE $? "Redis Port Validation"
+
+
 
 END_TIME=$(date +%s)
 TOTAL_TIME=$(( $END_TIME - $START_TIME ))
-echo -e "The script execution completed successfully, $Y time taken: $TOTAL_TIME seconds $N" | tee -a $LOG_FOLDER
+echo -e "The script execution completed successfully, $Y time taken: $TOTAL_TIME seconds $N" | tee -a $LOG_FILE
 
 
 
