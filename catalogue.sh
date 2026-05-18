@@ -133,7 +133,7 @@ dnf install mongodb-mongosh -y  &>>$LOG_FILE
 VALIDATE $? "Installing MongoDB client"
 
 # Load catalogue schema into MongoDB
-mongosh --host mongodb.robossl.shop >/app/db/master-data.sh &>>$LOG_FILE
+mongosh --host mongodb.robossl.shop </app/db/master-data.sh &>>$LOG_FILE
 VALIDATE $? "Load catalogue schema"
 
 
