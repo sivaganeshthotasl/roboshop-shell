@@ -35,19 +35,19 @@ mkdir -p "$LOG_FOLDER"
 USER_ID="$(id -u)"
 if [ $USER_ID -ne 0 ]
 then
-     echo -e "$R ERROR:: Please Run This Script With Root User $N"
+     echo -e "$R ERROR:: Please Run This Script With Root User $N" | tee -a $LOG_FILE
      exit 1
 else
-     echo -e "$G You are Runnnig with Root $Y User $N"
+     echo -e "$G You are Runnnig with Root $Y User $N" | tee -a $LOG_FILE
 fi
 
 # Validation Function
 VALIDATE(){
     if [ $1 -eq 0 ]
     then
-         echo -e "$G $2 is...SUCCESS $N"
+         echo -e "$G $2 is...SUCCESS $N" | tee -a $LOG_FILE
     else
-         echo -e "$R $2 is...FAILED $N"
+         echo -e "$R $2 is...FAILED $N" | tee -a $LOG_FILE
          exit 1
     fi
 
@@ -55,19 +55,19 @@ VALIDATE(){
 
 # Disable & Enable Nginx
 
-dnf module disable nginx -y
+dnf module disable nginx -y &>>$LOG_FILE
 VALIDATE $? "Disable Nginx"
-dnf module enable nginx:1.24 -y
+dnf module enable nginx:1.24 -y &>>$LOG_FILE
 VALIDATE $? "Enabling Nginx"
 
 # Install Nginx
-dnf install nginx -y
+dnf install nginx -y &>>$LOG_FILE
 VALIDATE $? "Installing Nginx"
 
 # Enable & Start Nginx
-systemctl enable nginx
+systemctl enable nginx &>>$LOG_FILE
 VALIDATE $? "Enabling Nginx"
-systemctl start nginx
+systemctl start nginx &>>$LOG_FILE
 VALIDATE $? "Starting Nginx"
 
 # Remove Default Nginx web content
@@ -75,7 +75,7 @@ rm -rf /usr/share/nginx/html/*
 VALIDATE $? " Removing Default Nginx Content"
 
 # Download Front Application Code
-curl -o /tmp/frontend.zip https://roboshop-artifacts.s3.amazonaws.com/frontend-v3.zip
+curl -o /tmp/frontend.zip https://roboshop-artifacts.s3.amazonaws.com/frontend-v3.zip &>>$LOG_FILE
 VALIDATE $? "Downloading Frontend Content to /tmp"
 
 # Extract Frontend Application Files
@@ -88,11 +88,11 @@ cp $SCRIPT_DIR/nginx.conf /etc/nginx/nginx.conf
 VALIDATE $? "Copying updated nginx.conf file"
 
 # Validating nginx conf
-nginx -t
+nginx -t &>>$LOG_FILE
 VALIDATE $? "Validating Nginx"
 
 # Restart Nginx 
-systemctl restart nginx
+systemctl restart nginx &>>$LOG_FILE
 VALIDATE $? "Restarting Nginx"
 
 
