@@ -80,7 +80,7 @@ VALIDATE $? "Downloading Frontend Content to /tmp"
 
 # Extract Frontend Application Files
 cd /usr/share/nginx/html
-unzip -o /tmp/frontend.zip
+unzip -o /tmp/frontend.zip &>>$LOG_FILE
 VALIDATE $? "Extracting frontend files"
 
 # Copy Roboshop Nginx conf file 
