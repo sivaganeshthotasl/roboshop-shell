@@ -89,12 +89,12 @@ VALIDATE $? "Downloading Catalogue zip File into /tmp Directory"
 # Extract Catalogue Application Files
 echo -e "$B Chage to /app and Extracting Catalogue app files"
 cd /app 
-unzip /tmp/catalogue.zip &>>$LOG_FILE
+unzip -o /tmp/catalogue.zip &>>$LOG_FILE  # -o is used for overwrite the files automatically becuase if files are already exit it overwrites all the files.
 VALIDATE $? "Extracting Catalogue app files"
 
 # Install NodeJS Dependencies 
 echo -e "$Y Installing NodeJS Dependencies $N"
-npm install &>>$LOG_FILE
+npm install --force &>>$LOG_FILE
 VALIDATE $? "Install NodeJS Dependencies"
 
 ## Catalogue Service Configuration
