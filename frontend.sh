@@ -30,6 +30,7 @@ SCRIPT_DIR=$(pwd)
 
 # Create Log Folder
 mkdir -p "$LOG_FOLDER"
+echo -e "$Y Script started executing at $(date) $N" | tee -a $LOG_FILE
 
 # Root User Validation
 USER_ID="$(id -u)"
