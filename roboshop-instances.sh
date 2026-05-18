@@ -5,12 +5,12 @@ SG_ID="sg-0f47a9bc6f43227ee"
 HOSTED_ZONEID="Z02439601F28QTHNLZ5B8"
 DOMAIN_NAME="robossl.shop"
 
-# Instances list of Roboshop
-EC2_INSTANCES=("mongodb" "redis" "mysql" "rabbitmq" "catalogue" "user" "cart" "shipping" "payment" "dispatch" "frontend")
+# Instances list of Roboshop ("mongodb" "redis" "mysql" "rabbitmq" "catalogue" "user" "cart" "shipping" "payment" "dispatch" "frontend")
+EC2_INSTANCES="$@"
 
 # Loop through all EC2 instances
 
-for instance in "${EC2_INSTANCES[@]}"
+for instance in "$@"
 do
     echo "Creating Roboshop EC2 Instance: $instance"
 

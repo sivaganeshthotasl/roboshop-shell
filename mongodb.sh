@@ -4,11 +4,12 @@
 # Project: Roboshop Automation
 # Component: Mongodb Setup
 # Description: Automated Mongodb installation and configuration Script
-# Version: MongoDB 7.0
+# Version: 1.0
 # Date: 17-05-26
 ###########################################################################
 
 # Colours and Formatting
+
 R="\e[31m"
 G="\e[32m"
 Y="\e[33m"
