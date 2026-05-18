@@ -133,7 +133,15 @@ dnf install mongodb-mongosh -y  &>>$LOG_FILE
 VALIDATE $? "Installing MongoDB client"
 
 # Load catalogue schema into MongoDB
-mongosh --host mongodb.robossl.shop </app/db/master-data.sh &>>$LOG_FILE
-VALIDATE $? "Load catalogue schema"
+STATUS=$(mongosh --host mongodb.robossl.shop --eval 'db.getMongo().getDBNames().indexOf("catalogue")')
+if [ $STATUS -lt 0 ]
+then
+      mongosh --host mongodb.robossl.shop </app/db/master-data.sh &>>$LOG_FILE
+      VALIDATE $? "Load catalogue schema"
+else
+     echo -e "Data is already loaded ... $Y SKIPPING $N"
+fi
+
+
 
 
