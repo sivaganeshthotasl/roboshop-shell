@@ -28,7 +28,7 @@ mkdir -p $LOG_FOLDER
 echo -e "$B script is started executing at $(date) $N"  | tee -a $LOG_FILE
 
 # Creating Script Directory for copying mongo.repo for installing mongodb client.
-SCRIPT_DIR="$PWD"
+SCRIPT_DIR=$(pwd)
 
 # Root User Validation
 USER_ID="$(id -u)"
@@ -83,7 +83,7 @@ VALIDATE $? "Creating Application Directory"
 
 # Download the Catalogue Application Code into /tmp Directory
 echo -e "$B Downloading Catalogue zip File into /tmp Directory $N"
-curl -o /tmp/catalogue.zip curl -o /tmp/catalogue.zip https://roboshop-artifacts.s3.amazonaws.com/catalogue-v3.zip  &>>$LOG_FILE
+curl -o /tmp/catalogue.zip https://roboshop-artifacts.s3.amazonaws.com/catalogue-v3.zip  &>>$LOG_FILE
 VALIDATE $? "Downloading Catalogue zip File into /tmp Directory"
 
 # Extract Catalogue Application Files
@@ -94,6 +94,8 @@ VALIDATE $? "Extracting Catalogue app files"
 
 # Install NodeJS Dependencies 
 echo -e "$Y Installing NodeJS Dependencies $N"
+cd /app
+VALIDATE $? "Changing to /app Directory"
 npm install --force &>>$LOG_FILE
 VALIDATE $? "Install NodeJS Dependencies"
 
@@ -109,23 +111,23 @@ VALIDATE $? "Copying catalogue service file"
 
 # Reload SystemD Manager
 echo -e "$Y Reloading SystemD Manager $N"
-systemctl daemon-reload  
+systemctl daemon-reload  &>>$LOG_FILE
 VALIDATE $? "Reloading SystemD Manager"
 
 # Enable & Start Catalogue service
 echo -e "$G Enabling & Start Catalogue service $N" 
-systemctl enable catalogue  
+systemctl enable catalogue  &>>$LOG_FILE
 VALIDATE $? "Enable Catalogue service"
-systemctl start catalogue  
+systemctl start catalogue  &>>$LOG_FILE
 VALIDATE $? "Start Catalogue service"
 
-## MonCagoDB Repository Configuration
+## MongoDB Repository Configuration
 # 1. Create mongodb.repo locally inside project/repo
 # 2. Add repository content > Refer Mongodb doc
 # 3. Copy file to /etc/yum.repos.d/
 
 # Copy MongoDB Repo File
-cp $SCRIPT_DIR/mongo.repo /etc/yum.repos.d/mongo.repo  
+cp $SCRIPT_DIR/mongo.repo /etc/yum.repos.d/mongo.repo  &>>$LOG_FILE
 VALIDATE $? "Copy MongoDB Repo File"
 
 # Install MongoDB client
@@ -133,13 +135,14 @@ dnf install mongodb-mongosh -y  &>>$LOG_FILE
 VALIDATE $? "Installing MongoDB client"
 
 # Load catalogue schema into MongoDB
-STATUS=$(mongosh --host mongodb.robossl.shop --eval 'db.getMongo().getDBNames().indexOf("catalogue")')
+STATUS=$(mongosh --quiet --host mongodb.robossl.shop --eval 'db.getMongo().getDBNames().indexOf("catalogue")')  # This is an idempotency check.
+
 if [ $STATUS -lt 0 ]
 then
-      mongosh --host mongodb.robossl.shop </app/db/master-data.sh &>>$LOG_FILE
+      mongosh --host mongodb.robossl.shop </app/db/master-data.js &>>$LOG_FILE
       VALIDATE $? "Load catalogue schema"
 else
-     echo -e "Data is already loaded ... $Y SKIPPING $N"
+      echo -e "$Y Data is already loaded ... SKIPPING $N"
 fi
 
 
