@@ -81,7 +81,7 @@ fi
 mkdir -p /app &>>$LOG_FILE
 VALIDATE $? "Creating Application home folder"
 
-# Download the user content to /tmp folder
+# Download the user content to /tmp folder & extract user files into /app
 curl -o /tmp/user.zip https://roboshop-artifacts.s3.amazonaws.com/user-v3.zip &>>$LOG_FILE
 VALIDATE $? "Downloading User Content"
 cd /app

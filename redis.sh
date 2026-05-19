@@ -25,7 +25,7 @@ LOG_FOLDER="/var/log/shellscript-logs"
 
 # Scripting Metadta Configuration and Log File Set up
 SCRIPT_NAME=$(echo $0 | cut -d "." -f1)
-LOG_FILE=$LOG_FOLDER/$SCRIPT_NAME.log
+LOG_FILE="$LOG_FOLDER/$SCRIPT_NAME.log"
 
 # Creating Log Folder and Set Time Stamp
 mkdir -p $LOG_FOLDER
