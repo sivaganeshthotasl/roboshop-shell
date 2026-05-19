@@ -60,7 +60,7 @@ VALIDATE $? "Installing Nodejs"
 
 #####Application Configuration#####
 # Creating Application User
-id roboshop &>>$LOG_FILE
+id roboshop | tee -a $LOG_FILE
 if [ $? -ne 0 ]
 then
      useradd --system --home /app --shell /sbin/nologin --comment "roboshop system user" roboshop  &>>$LOG_FILE
