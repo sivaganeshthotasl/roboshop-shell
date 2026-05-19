@@ -17,7 +17,7 @@ N="\e[0m"
 
 # Script Start Time
 START_TIME=$(date +%S)
-echo -e "$Y The Script execution started at: $B $START_TIME $N"
+echo -e "$Y The Script execution started at: $B $START_TIME $N" | tee -a $LOG_FILE
 
 # Log Folder Set Up
 LOG_FOLDER="/var/log/shellscript-logs"
@@ -32,39 +32,39 @@ mkdir -p $LOG_FOLDER
 # Root User Validation
 USER_ID=$(id -u)
 if [ $USER_ID -ne 0 ]
-then
-     echo -e "$R ERROR:: Please Proceed with Root User $N"
+then 
+     echo -e "$R ERROR:: Please Proceed with Root User $N" | tee -a $LOG_FILE
      exit 1
 else
-     echo -e "$G You Running With Root User $N"
+     echo -e "$G You Running With Root User $N" | tee -a $LOG_FILE
 fi
 
 # Validation Function
 VALIDATE(){
     if [ $1 -eq 0 ]
     then
-         echo -e "$G $2 is...SUCCESS $N"
+         echo -e "$G $2 is...SUCCESS $N" | tee -a $LOG_FILE
     else
-         echo "$R $2 is ...FAILED $N"
+         echo "$R $2 is ...FAILED $N" | tee -a $LOG_FILE
     fi
 
 }
 
 ##MysqlDB configuration##
 # Install Mysql server
-dnf install mysql-server -y
+dnf install mysql-server -y &>>$LOG_FILE
 VALIDATE $? "Installing mysql-server"
 
 # Enable and Start Mysql Service
-systemctl enable mysqld
+systemctl enable mysqld &>>$LOG_FILE
 VALIDATE $? "Enabling mysqld"
-systemctl start mysqld
+systemctl start mysqld &>>$LOG_FILE
 VALIDATE $? "Starting mysqld"
 
 #change the default root password in order to start using the database service. Use password RoboShop@1
-mysql_secure_installation --set-root-pass RoboShop@1
+mysql_secure_installation --set-root-pass RoboShop@1 &>>$LOG_FILE
 VALIDATE $? "Changing default Password"
 
 END_TIME=$(date +%s)
 TOTAL_TIME=$(( $END_TIME - $START_TIME ))
-echo -e "$G The Script executed Successfully. Time Taken: $TOTAL_TIME seconds $N"
+echo -e "$G The Script executed Successfully. Time Taken: $TOTAL_TIME seconds $N" | tee -a $LOG_FILE
