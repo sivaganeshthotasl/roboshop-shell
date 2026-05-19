@@ -61,7 +61,7 @@ VALIDATE $? "Installing Nodejs"
 #####Application Configuration#####
 # Creating Application User
 id roboshop 
-if [ $id -ne 0 ]
+if [ $? -ne 0 ]
 then
      useradd --system --home /app --shell /sbin/nologin --comment "roboshop system user" roboshop  &>>$LOG_FILE
 else
@@ -93,7 +93,7 @@ cp $SCRIPT_DIR/user.service /etc/systemd/system/user.service &>>$LOG_FILE
 VALIDATE $? "Copying User systemd service"
 
 # Reload the Systemd Manager
-systemctl daemon reload &>>$LOG_FILE
+systemctl daemon-reload &>>$LOG_FILE
 VALIDATE $? "Reloading Systemd Manager"
 
 # Enable & Start the User Service
