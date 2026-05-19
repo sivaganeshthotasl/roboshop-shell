@@ -78,7 +78,7 @@ VALIDATE $? "Creating Application Home Dir"
 
 # Downloading Cart content to /tmp
 curl -o /tmp/cart.zip https://roboshop-artifacts.s3.amazonaws.com/cart-v3.zip  &>>$LOG_FILE
-Validation $? "Downloading Cart Content to /tmp"
+VALIDATE $? "Downloading Cart Content to /tmp"
 cd /app
 unzip -o /tmp/cart.zip &>>$LOG_FILE
 VALIDATE $? "Extracting Cart Files in the /app"
