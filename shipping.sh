@@ -125,6 +125,8 @@ then
      VALIDATE $? "Loading the Master data"
 else
      echo -e "$B shipping Schemas Already Exists...$Y Skipping $N" | tee -a $LOG_FILE
+fi
+
 
 # Restart the Shipping Service
 systemctl restart shipping &>>$LOG_FILE
