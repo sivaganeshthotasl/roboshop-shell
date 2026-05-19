@@ -85,7 +85,7 @@ VALIDATE $? "Extracting Shipping Content"
 
 # Install Dependencies & Build the application
 cd /app
-maven clean package &>>$LOG_FILE
+mvn clean package &>>$LOG_FILE
 VALIDATE $? "Clear the Old dependencies and Installing new dependencies"
 mv target/shipping-1.0.jar shipping.jar  &>>$LOG_FILE
 VALIDATE $? "rename the shipping.jar file and store in the /app"
