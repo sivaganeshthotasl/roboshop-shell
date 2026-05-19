@@ -60,12 +60,13 @@ VALIDATE $? "Installing Nodejs"
 
 #####Application Configuration#####
 # Creating Application User
-id roboshop | tee -a $LOG_FILE
+echo -e "$Y Creating roboshop application User $N" | tee -a $LOG_FILE
+id roboshop &>>$LOG_FILE
 if [ $? -ne 0 ]
 then
      useradd --system --home /app --shell /sbin/nologin --comment "roboshop system user" roboshop  &>>$LOG_FILE
 else
-     echo -e "$B User already existed.. $Y Skipping $N"  &>>$LOG_FILE
+     echo -e "$B User already existed.. $Y Skipping $N"  | tee -a $LOG_FILE
 fi
 
 # Create /app folder
@@ -105,4 +106,4 @@ VALIDATE $? "Starting User Service"
 
 END_TIME=$(date +%s)
 TOTAL_TIME=$(( $END_TIME - $START_TIME ))
-echo -e "The script execution completed successfully, $Y time taken: $TOTAL_TIME seconds $N" | tee -a $LOG_FILE
+echo -e "$B The script execution completed successfully, $Y time taken: $TOTAL_TIME seconds $N" | tee -a $LOG_FILE

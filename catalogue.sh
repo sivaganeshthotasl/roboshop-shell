@@ -66,13 +66,14 @@ dnf install nodejs -y  &>>$LOG_FILE
 VALIDATE $? "Installing NodeJS"
 
 # Creating Roboshop Application User
-id roboshop
+echo -e "$Y Creating roboshop application User $N" | tee -a $LOG_FILE
+id roboshop  &>>$LOG_FILE
 if [ $? -ne 0 ]
 then
      useradd --system --home /app --shell /sbin/nologin --comment "Roboshop System User" roboshop &>>$LOG_FILE
      VALIDATE $? "Creating Roboshop Application User"
 else
-     echo -e "$B Roboshop User Already Created.. $Y Skipping $N"
+     echo -e "$B Roboshop User Already Created.. $Y Skipping $N"  &>>$LOG_FILE
 fi
 
 
@@ -90,7 +91,7 @@ VALIDATE $? "Downloading Catalogue zip File into /tmp Directory"
 echo -e "$B Chage to /app and Extracting Catalogue app files"
 cd /app 
 unzip -o /tmp/catalogue.zip &>>$LOG_FILE  # -o is used for overwrite the files automatically becuase if files are already exit it overwrites all the files.
-VALIDATE $? "Extracting Catalogue app files"
+VALIDATE $? "Extracting Catalogue content files"
 
 # Install NodeJS Dependencies 
 echo -e "$Y Installing NodeJS Dependencies $N"
