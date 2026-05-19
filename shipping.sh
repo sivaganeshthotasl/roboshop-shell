@@ -114,17 +114,20 @@ VALIDATE $? "Install mysql client"
 
 # Load the Schema, app-user and masterdata
 ## Check whether shipping schema already exists
-SCHEMA_CHECK=$(mysql -h mysql.robossl.shop -uroot -pRoboShop@1 -se "use cities; show tables;" | wc -l)
-if [ $SCHEMA_CHECK -ne 0 ]
+DB_CHECK=$(mysql -h mysql.robossl.shop -uroot -pRoboShop@1 -se "show databases;" | grep cities)
+
+if [ -z "$DB_CHECK" ]
 then
      mysql -h mysql.robossl.shop -uroot -pRoboShop@1 < /app/db/schema.sql &>>$LOG_FILE
      VALIDATE $? "Loading Schema into mysqldb"
+
      mysql -h mysql.robossl.shop -uroot -pRoboShop@1 < /app/db/app-user.sql &>>$LOG_FILE
-     VALIDATE $? "Loading appliction user data"
+     VALIDATE $? "Loading application user data"
+
      mysql -h mysql.robossl.shop -uroot -pRoboShop@1 < /app/db/master-data.sql &>>$LOG_FILE
      VALIDATE $? "Loading the Master data"
 else
-     echo -e "$B shipping Schemas Already Exists...$Y Skipping $N" | tee -a $LOG_FILE
+     echo -e "$B Shipping Schemas Already Exists... $Y Skipping $N" | tee -a $LOG_FILE
 fi
 
 
