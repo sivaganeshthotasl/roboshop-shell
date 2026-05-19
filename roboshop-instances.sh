@@ -1,5 +1,14 @@
 #!/bin/bash
 
+################################################
+# Author: Siva Ganesh Thota SL
+# Project: Roboshop Automation
+# Component: Roboshop Ec2 Instances Set Up
+# Description: Automated EC2 Instances Configuration
+# Verstion: 1.0
+# Date: 17/05/26
+################################################
+
 AMI_ID="ami-0220d79f3f480ecf5"
 SG_ID="sg-0f47a9bc6f43227ee"
 HOSTED_ZONEID="Z02439601F28QTHNLZ5B8"
