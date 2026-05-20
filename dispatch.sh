@@ -23,6 +23,9 @@ LOG_FOLDER="/var/log/shellscript-logs"
 SCRIPT_NAME="$(echo $0 | cut -d "." -f1)"
 LOG_FILE="$LOG_FOLDER/$SCRIPT_NAME.log"
 
+# Script Dir
+SCRIPT_DIR="$(pwd)"
+
 # Create Log Folder
 mkdir -p $LOG_FOLDER
 
