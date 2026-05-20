@@ -23,37 +23,40 @@ LOG_FOLDER="/var/log/shellscript-logs"
 SCRIPT_NAME="$(echo $0 | cut -d "." -f1)"
 LOG_FILE="$LOG_FOLDER/$SCRIPT_NAME.log"
 
+# Script Dir
+SCRIPT_DIR="$(pwd)"
+
 # Create Log Folder
 mkdir -p $LOG_FOLDER
 
 # Script Start Time
 START_TIME="$(date +%s)"
-echo -e "$Y The Script execution started at $START_TIME $N"
+echo -e "$Y The Script execution started at $START_TIME $N" | tee  -a $LOG_FILE
 
 # Root User Validation
 USER_ID="$(id -u)"
 if [ $USER_ID -ne 0 ]
 then
-     echo -e "$R ERROR:: Please Proceed with Root User $N"
+     echo -e "$R ERROR:: Please Proceed with Root User $N" | tee  -a $LOG_FILE
      exit 1
 else
-     echo -e "$G You are Running with Root User $N"
+     echo -e "$G You are Running with Root User $N" | tee  -a $LOG_FILE
 fi
 
 # Validate Function
 VALIDATE(){
     if [ $1 -eq 0 ]
     then
-         echo "$G $2 is....SUCCESS $N"
+         echo -e "$G $2 is....SUCCESS $N" | tee  -a $LOG_FILE
     else
-         echo "$R $2 is....FAILED $N"
+         echo -e "$R $2 is....FAILED $N" | tee  -a $LOG_FILE
          exit 1
     fi
 }
 
 
 # Install Python 3 and required build tools
-dnf install python3 gcc python3-devel -y
+dnf install python3 gcc python3-devel -y &>>$LOG_FILE
 VALIDATE $? "Installing Python3 & Build Tools"
 
 ##Configure the Application##
@@ -62,7 +65,7 @@ VALIDATE $? "Installing Python3 & Build Tools"
 id roboshop
 if [ $? -ne 0 ]
 then
-     useradd --system --home /app --shell /sbin/nologin --comment "roboshop system user" roboshop
+     useradd --system --home /app --shell /sbin/nologin --comment "roboshop system user" roboshop &>>$LOG_FILE
      VALIDATE $? "Creating User to Run applicaion"
 else
      echo -e "$Y User is already Created....$B Skipping $N"
@@ -73,37 +76,37 @@ mkdir -p /app
 VALIDATE $? "Creating /app Dir"
 
 # Downloading Payment file in /tmp
-curl -o /tmp/payment.zip https://roboshop-artifacts.s3.amazonaws.com/payment-v3.zip 
+curl -o /tmp/payment.zip https://roboshop-artifacts.s3.amazonaws.com/payment-v3.zip &>>$LOG_FILE
 VALIDATE $? "Downloading Payment files"
 
 # Extracting Content of Payment in /app
 cd /app
-unzip -o /tmp/payment.zip
+unzip -o /tmp/payment.zip &>>$LOG_FILE
 VALIDATE $? "Extracting Payment files"
 
 # Install all required application dependencies
 cd /app
-pip3 install -r requirements.txt
+pip3 install -r requirements.txt &>>$LOG_FILE
 VALIDATE $? "Install Requirement Dependencies"
 
 ## payment service Configuration
 # 1. Create payment.service locally inside project/repo
 # 2. Add repository content > Refer payment doc
 # 3. Copy file to /etc/systemd/system/payment.service
-cp $SCRIPT_DIR/payment.service /etc/systemd/system/payment.service
+cp $SCRIPT_DIR/payment.service /etc/systemd/system/payment.service &>>$LOG_FILE
 VALIDATE $? "Copying payment.service file"
 
 # Reload the Systemd Manager
-systemctl daemon-reload
+systemctl daemon-reload &>>$LOG_FILE
 VALIDATE $? "Reloading Systemd Service"
 
 # Enable & Start Payment Service
-systemctl enable payment
+systemctl enable payment &>>$LOG_FILE
 VALIDATE $? "Enabling Payment Service"
-systemctl start payment
+systemctl start payment &>>$LOG_FILE
 VALIDATE $? "Starting Payment Service"
 
 END_TIME="$(date +%s)"
 TOTAL_TIME="$(( $END_TIME - $START_TIME ))"
-echo -e "$Y The script execution is completed successfull. Time Taken: $B $TOTAL_TIME seconds $N"
+echo -e "$Y The script execution is completed successfull. Time Taken: $B $TOTAL_TIME seconds $N" | tee  -a $LOG_FILE
 
