@@ -82,10 +82,17 @@ cd /app
 unzip -o /tmp/dispatch.zip &>>$LOG_FILE
 VALIDATE $? "Extracting Dispatch"
 
-# install the required dependencies and build the application
+# install the required dependencies 
 cd /app
-go mod init dispatch &>>$LOG_FILE
-VALIDATE $? "Intiliging Dispatch"
+if [ -f go.mod ]
+then
+     echo -e "$Y go.mod already exists...Skipping $N" | tee -a $LOG_FILE
+else
+     go mod init dispatch &>>$LOG_FILE
+     VALIDATE $? "Initializing Dispatch"
+fi
+
+# Dowload the Libraries and build the application
 go get &>>$LOG_FILE
 VALIDATE $? "Dowloading Libraries"
 go build &>>$LOG_FILE
