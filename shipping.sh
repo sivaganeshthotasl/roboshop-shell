@@ -27,6 +27,7 @@ LOG_FOLDER="/var/log/shellscript-logs"
 # Script Name Metadata & Log File Set Up
 SCRIPT_NAME=$(echo $0 | cut -d "." -f1)
 LOG_FILE="$LOG_FOLDER/$SCRIPT_NAME.log"
+MYSQL_PASSWORD="RoboShop@1"
 
 # Create a Log Folder Dir
 mkdir -p $LOG_FOLDER
@@ -118,13 +119,13 @@ DB_CHECK=$(mysql -h mysql.robossl.shop -uroot -pRoboShop@1 -se "show databases;"
 
 if [ -z "$DB_CHECK" ]
 then
-     mysql -h mysql.robossl.shop -uroot -pRoboShop@1 < /app/db/schema.sql &>>$LOG_FILE
+     mysql -h mysql.robossl.shop -uroot -pMYSQL_PASSWORD < /app/db/schema.sql &>>$LOG_FILE
      VALIDATE $? "Loading Schema into mysqldb"
 
-     mysql -h mysql.robossl.shop -uroot -pRoboShop@1 < /app/db/app-user.sql &>>$LOG_FILE
+     mysql -h mysql.robossl.shop -uroot -pMYSQL_PASSWORD < /app/db/app-user.sql &>>$LOG_FILE
      VALIDATE $? "Loading application user data"
 
-     mysql -h mysql.robossl.shop -uroot -pRoboShop@1 < /app/db/master-data.sql &>>$LOG_FILE
+     mysql -h mysql.robossl.shop -uroot -pMYSQL_PASSWORD < /app/db/master-data.sql &>>$LOG_FILE
      VALIDATE $? "Loading the Master data"
 else
      echo -e "$B Shipping Schemas Already Exists... $Y Skipping $N" | tee -a $LOG_FILE
