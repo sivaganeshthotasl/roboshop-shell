@@ -119,13 +119,13 @@ DB_CHECK=$(mysql -h mysql.robossl.shop -uroot -pRoboShop@1 -se "show databases;"
 
 if [ -z "$DB_CHECK" ]
 then
-     mysql -h mysql.robossl.shop -uroot -pMYSQL_PASSWORD < /app/db/schema.sql &>>$LOG_FILE
+     mysql -h mysql.robossl.shop -uroot -p$MYSQL_PASSWORD < /app/db/schema.sql &>>$LOG_FILE
      VALIDATE $? "Loading Schema into mysqldb"
 
-     mysql -h mysql.robossl.shop -uroot -pMYSQL_PASSWORD < /app/db/app-user.sql &>>$LOG_FILE
+     mysql -h mysql.robossl.shop -uroot -p$MYSQL_PASSWORD < /app/db/app-user.sql &>>$LOG_FILE
      VALIDATE $? "Loading application user data"
 
-     mysql -h mysql.robossl.shop -uroot -pMYSQL_PASSWORD < /app/db/master-data.sql &>>$LOG_FILE
+     mysql -h mysql.robossl.shop -uroot -p$MYSQL_PASSWORD < /app/db/master-data.sql &>>$LOG_FILE
      VALIDATE $? "Loading the Master data"
 else
      echo -e "$B Shipping Schemas Already Exists... $Y Skipping $N" | tee -a $LOG_FILE
